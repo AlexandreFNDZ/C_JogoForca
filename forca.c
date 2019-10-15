@@ -3,7 +3,14 @@
 #include <string.h>
 #include "forca.h"
 
-
+int geraAleatorio(int maximo)
+{
+    time_t t;
+    int n = 0;
+    srand((unsigned) time(&t));
+    n = (rand() % maximo) + 1;
+    return n;
+};
 
 PalavraSecreta * inicializaListaSecreta()
 {
@@ -68,4 +75,59 @@ PalavraSecreta * inserePalavraSecreta(PalavraSecreta *l,char word[31],char subje
     return novo;
 };
 
+PalavraSecreta * sorteiaPalavra(PalavraSecreta *l)
+{
+    PalavraSecreta * p;
 
+    while(temPalavraNaoUsada(l)){
+        p = retornaPalavraPos(l,geraAleatorio(tamanhoListaSecreta(l)));
+        if(p->status == 0){
+            p->status = 1;
+            return p;
+        }
+    }
+    return NULL;
+};
+
+int temPalavraNaoUsada(PalavraSecreta *l)
+{
+    PalavraSecreta *p;
+
+    for(p = l; p != NULL; p = p->prox)
+    {
+        if(p->status == 0)
+        {
+             return 1;
+        }
+    }
+
+    return 0;
+};
+
+int tamanhoListaSecreta(PalavraSecreta *l)
+{
+    int n = 0;
+
+    for(PalavraSecreta *p = l; p != NULL; p = p->prox)
+    {
+        n++;
+    };
+
+    return n;
+};
+
+PalavraSecreta * retornaPalavraPos(PalavraSecreta *l, int pos)
+{
+    int n = 1;
+    PalavraSecreta *p;
+    for(p = l; p != NULL; p = p->prox)
+    {
+        if(n == pos)
+        {
+            break;
+        }
+
+        n++;
+    }
+    return p;
+};
